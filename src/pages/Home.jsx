@@ -2,37 +2,30 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Home({ onAddUser }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [formData, setFormData] = useState({ name: '', email: '' });
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleAdd = (e) => {
     e.preventDefault();
-    if (!name || !email) return alert("Please fill all fields");
+    if (!formData.name || !formData.email) return;
 
-    const newUser = {
-      id: Date.now(), // Temporary ID
-      name,
-      email
-    };
-
-    onAddUser(newUser);
-    navigate('/users'); // Redirect to list after adding
+    onAddUser({ id: Date.now(), ...formData });
+    navigate('/users');
   };
 
   return (
-    <div className="form-container">
-      <h2>Add New User</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="page">
+      <h2>Add New Member</h2>
+      <form onSubmit={handleAdd} className="form">
         <input 
-          type="text" placeholder="User Name" 
-          value={name} onChange={(e) => setName(e.target.value)} 
+          type="text" placeholder="Name" 
+          onChange={(e) => setFormData({...formData, name: e.target.value})} 
         />
         <input 
-          type="email" placeholder="Email Address" 
-          value={email} onChange={(e) => setEmail(e.target.value)} 
+          type="email" placeholder="Email" 
+          onChange={(e) => setFormData({...formData, email: e.target.value})} 
         />
-        <button type="submit">Add User</button>
+        <button type="submit">Add to Directory</button>
       </form>
     </div>
   );
